@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Subhead">
+        <item name="android:textSize">@dimen/text_size_h</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">?android:textColorPrimary</item>
+    </style>
+
+    <style name="Body">
+        <item name="android:textSize">@dimen/text_size_m</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">?android:textColorPrimary</item>
+    </style>
+
+    <style name="Body.Secondary">
+        <item name="android:textColor">?android:textColorSecondary</item>
+    </style>
+
+    <style name="Body.Bold">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Caption">
+        <item name="android:textSize">@dimen/text_size_l</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">?android:textColorPrimary</item>
+    </style>
+</resources>

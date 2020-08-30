@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Lannister Always Pays</string>
+    <string name="connect_problem">Проверьте ваше подключение к сети и\n повторите попытку.</string>
+    <string name="connect_problem_list_empty">
+        Ошибка подключения к сети, \n
+        для повторного запроса проведите пальцем \n
+        вниз по экрану</string>
+    <string name="connect_problem_list">Произошла ошибка сети</string>
+    <string name="retry">Повторить</string>
+
 </resources>

@@ -56,7 +56,7 @@ class CharactersListActivity : AppCompatActivity(), CharactersListView,
         if (currentPage != PAGE_START) paginationAdapter.removeLoading()
         currentPage++
         swipeRefresh.isRefreshing = false
-        paginationAdapter.addItems(data)
+        if(data.isEmpty()) isLastPage = true else paginationAdapter.addItems(data)
     }
 
     private fun setupListCharacters() {

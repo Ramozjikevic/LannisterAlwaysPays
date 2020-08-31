@@ -4,7 +4,7 @@ import ru.test.app.utils.TaskRunner
 import ru.test.app.data.Repository
 
 class CharacterInfoPresenter(
-    private val id : Long,
+    private val id: Long,
     private val view: CharacterInfoView
 ) {
     private val repository = Repository()
@@ -14,11 +14,11 @@ class CharacterInfoPresenter(
     }
 
     fun getCharacter() {
-        TaskRunner.run(
+        TaskRunner.runWithIntValue(
+            value = id.toInt(),
             onStartLoad = view::showLoader,
-            onGetData = {repository.getCharacterInfo(id)},
+            onGetDataFrom = repository::getCharacterInfo,
             onSuccess = view::showCharacterInformation,
-            onCanceled = view::showStub,
             onError = view::showStub
         )
     }

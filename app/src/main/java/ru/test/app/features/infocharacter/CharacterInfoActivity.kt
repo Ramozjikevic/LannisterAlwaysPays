@@ -34,7 +34,7 @@ class CharacterInfoActivity : AppCompatActivity(), CharacterInfoView {
         viewSwitch.display(progressBar)
     }
 
-    override fun showStub() {
+    override fun showStub(e: Exception) {
         viewSwitch.display(emptyStub)
     }
 

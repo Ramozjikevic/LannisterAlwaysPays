@@ -3,13 +3,14 @@ package ru.test.app.features.listcharacters
 import ru.test.app.data.Repository
 import ru.test.app.models.CharacterItemUI
 import ru.test.app.utils.Paginator
+import ru.test.app.utils.TaskRunner
 
 class CharactersListPresenter(
     private val view: CharactersListView
 ) {
     private val repository = Repository()
     private var paginator: Paginator<CharacterItemUI> = Paginator(
-        repository::getListCharacters,
+        ::requestCharacters,
         object : Paginator.ViewController<CharacterItemUI> {
             override fun showEmptyProgress() {
                 view.showRefreshing()
@@ -69,4 +70,16 @@ class CharactersListPresenter(
 
     fun getCharacters() = paginator.loadNewPage()
 
+    private fun requestCharacters(
+        page: Int,
+        onSuccess: (List<CharacterItemUI>) -> Unit,
+        onError: (error: Throwable) -> Unit
+    ) {
+        TaskRunner.runWithIntValue(
+            value = page,
+            onGetDataFrom = repository::getListCharacters,
+            onSuccess = onSuccess,
+            onError = onError
+        )
+    }
 }

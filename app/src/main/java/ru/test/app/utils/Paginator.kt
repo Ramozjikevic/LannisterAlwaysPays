@@ -1,7 +1,13 @@
 package ru.test.app.utils
 
+import ru.test.app.models.CharacterItemUI
+
 class Paginator<T>(
-    private val requestFactory: (Int) -> List<T>,
+    private val request: (
+        Int,
+        (List<T>) -> Unit,
+        (error: Throwable) -> Unit
+    ) -> Unit,
     private val viewController: ViewController<T>
 ) {
 
@@ -41,11 +47,7 @@ class Paginator<T>(
     }
 
     private fun loadPage(page: Int) {
-        TaskRunner.run(
-            onGetData = { requestFactory.invoke(currentPage) },
-            onSuccess = currentState::newData,
-            onError2 = currentState::fail
-        )
+        request.invoke(page, currentState::newData, currentState::fail)
     }
 
     private inner class EMPTY : State<T> {

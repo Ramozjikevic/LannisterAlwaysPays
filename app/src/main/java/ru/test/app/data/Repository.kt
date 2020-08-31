@@ -14,7 +14,7 @@ class Repository {
         return httpsClient.getCharacters(url)?.toUI() ?: emptyList()
     }
 
-    fun getCharacterInfo(id: Long): List<Pair<String, String>> {
+    fun getCharacterInfo(id: Int): List<Pair<String, String>> {
         val url = URL("$URL/$id")
         return httpsClient.getCharacter(url).serializeToMap()
             .prepareMap()
@@ -30,14 +30,14 @@ class Repository {
 fun Map<String, Any>.prepareMap(): Map<String, String> {
     val mutableMap = mutableMapOf<String, String>()
 
-    this.forEach{ item ->
+    this.forEach { item ->
         when (val value = item.value) {
             is String -> if (value.isNotBlank()) {
                 mutableMap[item.key.fixKeyValue()] = value
             }
             is List<*> -> if (value.isNotEmpty()) {
-                val string= value.joinToString()
-                if(string.isNotBlank()) mutableMap[item.key.fixKeyValue()] = string
+                val string = value.joinToString()
+                if (string.isNotBlank()) mutableMap[item.key.fixKeyValue()] = string
             }
         }
     }
@@ -45,7 +45,7 @@ fun Map<String, Any>.prepareMap(): Map<String, String> {
 }
 
 fun String.fixKeyValue(): String {
-    return when(this) {
+    return when (this) {
         "playedBy" -> "Played by"
         "tvSeries" -> "TV Series"
         "povBooks" -> "POV Books"

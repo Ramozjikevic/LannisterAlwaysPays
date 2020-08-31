@@ -4,32 +4,30 @@ import android.os.AsyncTask
 
 
 object TaskRunner {
-    fun <T> run(
-        onStartLoad: () -> Unit = {},
-        onGetData: () -> T,
+    fun <T> runWithIntValue(
+        value: Int,
+        onGetDataFrom: (value: Int) -> T,
         onSuccess: (T) -> Unit,
+        onStartLoad: () -> Unit = {},
         onCanceled: () -> Unit = {},
-        onError: () -> Unit = {},
-        onError2: (e: Exception) -> Unit = {}
+        onError: (e: Exception) -> Unit = {}
     ) {
         DownloadTask(
             onStartLoad,
-            onGetData,
+            onGetDataFrom,
             onSuccess,
             onCanceled,
-            onError,
-            onError2
-        ).execute()
+            onError
+        ).execute(value)
     }
 
-    class DownloadTask<T>(
+    private class DownloadTask<T>(
         val onPreExecute: () -> Unit,
-        val doInBackground: () -> T,
+        val doInBackground: (Int) -> T,
         val onPostExecute: (T) -> Unit,
         val onCanceled: () -> Unit,
-        val onError: () -> Unit,
-        val onError2: (e: Exception) -> Unit,
-    ) : AsyncTask<Unit, Unit, DownloadTask<T>.Result?>() {
+        val onError: (e: Exception) -> Unit
+    ) : AsyncTask<Int, Unit, DownloadTask<T>.Result?>() {
 
         inner class Result {
             var resultValue: T? = null
@@ -48,11 +46,11 @@ object TaskRunner {
             onPreExecute.invoke()
         }
 
-        override fun doInBackground(vararg p0: Unit?): Result? {
+        override fun doInBackground(vararg value: Int?): Result? {
             var result: Result? = null
             if (!isCancelled) {
                 result = try {
-                    Result(doInBackground.invoke())
+                    Result(doInBackground.invoke(value.first()!!))
                 } catch (e: Exception) {
                     Result(e)
                 }
@@ -65,8 +63,7 @@ object TaskRunner {
                 onPostExecute.invoke(result.resultValue!!)
             }
             result?.exception?.also {
-                onError.invoke()
-                onError2.invoke(it)
+                onError.invoke(it)
             }
         }
 

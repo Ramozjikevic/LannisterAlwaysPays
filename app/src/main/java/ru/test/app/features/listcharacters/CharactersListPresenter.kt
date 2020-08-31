@@ -77,7 +77,7 @@ class CharactersListPresenter(
     ) {
         TaskRunner.runWithIntValue(
             value = page,
-            onGetDataFrom = repository::getListCharacters,
+            request = repository::getListCharacters,
             onSuccess = onSuccess,
             onError = onError
         )

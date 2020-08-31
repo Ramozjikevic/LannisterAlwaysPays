@@ -17,7 +17,7 @@ class CharacterInfoPresenter(
         TaskRunner.runWithIntValue(
             value = id.toInt(),
             onStartLoad = view::showLoader,
-            onGetDataFrom = repository::getCharacterInfo,
+            request = repository::getCharacterInfo,
             onSuccess = view::showCharacterInformation,
             onError = view::showStub
         )

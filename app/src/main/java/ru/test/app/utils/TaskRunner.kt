@@ -6,7 +6,7 @@ import android.os.AsyncTask
 object TaskRunner {
     fun <T> runWithIntValue(
         value: Int,
-        onGetDataFrom: (value: Int) -> T,
+        request: (value: Int) -> T,
         onSuccess: (T) -> Unit,
         onStartLoad: () -> Unit = {},
         onCanceled: () -> Unit = {},
@@ -14,7 +14,7 @@ object TaskRunner {
     ) {
         DownloadTask(
             onStartLoad,
-            onGetDataFrom,
+            request,
             onSuccess,
             onCanceled,
             onError

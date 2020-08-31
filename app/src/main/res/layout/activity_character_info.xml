@@ -37,9 +37,9 @@
             android:paddingBottom="@dimen/spacing_h"
             android:text="@string/connect_problem" />
 
-        <Button
+        <android.support.design.button.MaterialButton
             android:id="@+id/bottomRetry"
-            style="@style/Body.Bold"
+            style="@style/ElevatedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/spacing_h"

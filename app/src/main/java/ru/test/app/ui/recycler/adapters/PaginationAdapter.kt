@@ -15,6 +15,7 @@ class PaginationAdapter(private val downloadNewPageListener: () -> Unit) :
     RecyclerView.Adapter<PaginationAdapter.BasicViewHolder>() {
 
     var items: MutableList<CharacterItemUI> = mutableListOf()
+
     private var isLoaderVisible = false
     private var isErrorVisible = false
 
@@ -63,7 +64,7 @@ class PaginationAdapter(private val downloadNewPageListener: () -> Unit) :
     override fun onBindViewHolder(holder: BasicViewHolder, position: Int) {
         when (holder) {
             is BasicViewHolder.CharactersViewHolder -> holder.bind(items[position])
-            is BasicViewHolder.ErrorHolder -> holder.bind(downloadNewPageListener, ::removeError)
+            is BasicViewHolder.ErrorHolder -> holder.bind(downloadNewPageListener)
         }
     }
 
@@ -88,12 +89,11 @@ class PaginationAdapter(private val downloadNewPageListener: () -> Unit) :
     }
 
     fun addError() {
-        removeLoading()
         isErrorVisible = true
         addHolder()
     }
 
-    private fun removeError() {
+    fun removeError() {
         isErrorVisible = false
         removeHolder()
     }
@@ -104,11 +104,13 @@ class PaginationAdapter(private val downloadNewPageListener: () -> Unit) :
     }
 
     private fun removeHolder() {
-        val position: Int = items.size - 1
-        val item = getItem(position)
-        if (item != null) {
-            items.removeAt(position)
-            notifyItemRemoved(position)
+        if (items.isNotEmpty()) {
+            val position: Int = items.size - 1
+            val item = getItem(position)
+            if (item != null) {
+                items.removeAt(position)
+                notifyItemRemoved(position)
+            }
         }
     }
 
@@ -119,7 +121,9 @@ class PaginationAdapter(private val downloadNewPageListener: () -> Unit) :
     sealed class BasicViewHolder(container: View) : RecyclerView.ViewHolder(container) {
 
         class CharactersViewHolder(container: View) : BasicViewHolder(container) {
+
             private val name: TextView = container.findViewById(R.id.name)
+
             fun bind(item: CharacterItemUI) {
                 name.text = item.name
                 itemView.setOnClickListener { view ->
@@ -131,10 +135,11 @@ class PaginationAdapter(private val downloadNewPageListener: () -> Unit) :
         class ProgressHolder(container: View) : BasicViewHolder(container)
 
         class ErrorHolder(container: View) : BasicViewHolder(container) {
+
             private val bottomRetry: TextView = container.findViewById(R.id.bottomRetry)
-            fun bind(downloadNewPageListener: () -> Unit, removeErrorListener: () -> Unit) {
+
+            fun bind(downloadNewPageListener: () -> Unit) {
                 bottomRetry.setOnClickListener {
-                    removeErrorListener.invoke()
                     downloadNewPageListener.invoke()
                 }
             }

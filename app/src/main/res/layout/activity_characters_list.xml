@@ -20,37 +20,37 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            tools:listitem="@layout/item_list_character"/>
+            tools:listitem="@layout/item_list_character" />
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <FrameLayout
-        android:id="@+id/errorText"
+        android:id="@+id/emptyError"
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:visibility="gone"
             android:orientation="vertical">
 
             <ImageView
-                android:src="@drawable/swipe"
-                android:tint="@color/greyDark"
                 android:layout_width="64dp"
+                android:layout_height="64dp"
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/spacing_h"
-                android:layout_height="64dp"/>
+                android:src="@drawable/swipe"
+                android:tint="@color/greyDark" />
 
             <TextView
-                android:text="@string/connect_problem_list_empty"
                 style="@style/Body.Secondary"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:layout_height="wrap_content" />
+                android:text="@string/connect_problem_list_empty" />
         </LinearLayout>
 
     </FrameLayout>

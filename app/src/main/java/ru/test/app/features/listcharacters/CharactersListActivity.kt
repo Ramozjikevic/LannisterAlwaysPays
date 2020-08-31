@@ -12,13 +12,11 @@ import ru.test.app.models.CharacterItemUI
 import ru.test.app.ui.recycler.adapters.PaginationAdapter
 import ru.test.app.ui.recycler.itemdecorators.CustomDividerItemDecorator
 import ru.test.app.ui.recycler.listeners.PaginationListener
-import ru.test.app.ui.recycler.listeners.PaginationListener.Companion.PAGE_START
 
 
 class CharactersListActivity : AppCompatActivity(), CharactersListView,
     SwipeRefreshLayout.OnRefreshListener {
 
-    private var currentPage = PAGE_START
     private var isLastPage = false
     private var isLoading = false
 
@@ -33,30 +31,50 @@ class CharactersListActivity : AppCompatActivity(), CharactersListView,
         initPresenter()
     }
 
-    override fun showConnectionError() {
-        swipeRefresh.isRefreshing = false
-        if (currentPage == PAGE_START) errorText.setGone(false) else paginationAdapter.addError()
-    }
-
-    override fun showLoader() {
-        isLoading = true
-        if (currentPage != PAGE_START) paginationAdapter.addLoading()
-    }
-
     override fun onRefresh() {
-        currentPage = PAGE_START
-        isLastPage = false
         paginationAdapter.clear()
-        presenter.getCharacters(currentPage)
+        presenter.onRefresh()
     }
 
-    override fun showCharacters(data: List<CharacterItemUI>) {
-        isLoading = false
-        errorText.setGone(true)
-        if (currentPage != PAGE_START) paginationAdapter.removeLoading()
-        currentPage++
+    override fun showEmptyError() {
+        emptyError.setGone(false)
+    }
+
+    override fun hideEmptyError() {
+        emptyError.setGone()
+    }
+
+    override fun showRefreshing() {
+        swipeRefresh.isRefreshing = true
+    }
+
+    override fun hideRefreshing() {
         swipeRefresh.isRefreshing = false
-        if(data.isEmpty()) isLastPage = true else paginationAdapter.addItems(data)
+    }
+
+    override fun showPageLoader() {
+        paginationAdapter.addLoading()
+    }
+
+    override fun hidePageLoader() {
+        paginationAdapter.removeLoading()
+    }
+
+    override fun showPageLoadError() {
+        paginationAdapter.addError()
+    }
+
+    override fun hidePageLoadError() {
+        paginationAdapter.removeError()
+    }
+
+    override fun showListCharacters(data: List<CharacterItemUI>) {
+        paginationAdapter.addItems(data)
+        listCharacters.setGone(false)
+    }
+
+    override fun hideListCharacters() {
+        listCharacters.setGone()
     }
 
     private fun setupListCharacters() {
@@ -65,7 +83,7 @@ class CharactersListActivity : AppCompatActivity(), CharactersListView,
 
         val linearLayoutManager = LinearLayoutManager(this)
         paginationAdapter = PaginationAdapter {
-            presenter.getCharacters(currentPage)
+            presenter.getCharacters()
         }
 
         with(listCharacters) {
@@ -76,8 +94,7 @@ class CharactersListActivity : AppCompatActivity(), CharactersListView,
 
             addOnScrollListener(object : PaginationListener(linearLayoutManager) {
                 override fun loadMoreItems() {
-                    val requestPage = currentPage + 1
-                    presenter.getCharacters(requestPage)
+                    presenter.getCharacters()
                 }
 
                 override fun isLastPage(): Boolean {

@@ -5,31 +5,34 @@ import android.os.AsyncTask
 
 object TaskRunner {
     fun <T> run(
-        onStartLoad: () -> Unit,
+        onStartLoad: () -> Unit = {},
         onGetData: () -> T,
         onSuccess: (T) -> Unit,
-        onCanceled:() -> Unit = {},
-        onError:() -> Unit = {}
+        onCanceled: () -> Unit = {},
+        onError: () -> Unit = {},
+        onError2: (e: Exception) -> Unit = {}
     ) {
         DownloadTask(
             onStartLoad,
             onGetData,
             onSuccess,
             onCanceled,
-            onError
+            onError,
+            onError2
         ).execute()
     }
 
-    private class DownloadTask<T>(
+    class DownloadTask<T>(
         val onPreExecute: () -> Unit,
         val doInBackground: () -> T,
         val onPostExecute: (T) -> Unit,
         val onCanceled: () -> Unit,
-        val onError: () -> Unit
+        val onError: () -> Unit,
+        val onError2: (e: Exception) -> Unit,
     ) : AsyncTask<Unit, Unit, DownloadTask<T>.Result?>() {
 
         inner class Result {
-            var resultValue:  T? = null
+            var resultValue: T? = null
             var exception: Exception? = null
 
             constructor(resultValue: T) {
@@ -63,6 +66,7 @@ object TaskRunner {
             }
             result?.exception?.also {
                 onError.invoke()
+                onError2.invoke(it)
             }
         }
 

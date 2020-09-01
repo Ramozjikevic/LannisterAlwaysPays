@@ -36,7 +36,7 @@ fun Map<String, Any>.prepareMap(): Map<String, String> {
                 mutableMap[item.key.fixKeyValue()] = value
             }
             is List<*> -> if (value.isNotEmpty()) {
-                val string = value.joinToString()
+                val string = value.joinToString(separator = "\n")
                 if (string.isNotBlank()) mutableMap[item.key.fixKeyValue()] = string
             }
         }
